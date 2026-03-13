@@ -7,12 +7,14 @@ import {
   Wrench, 
   FileText, 
   Box, 
-  LogOut 
+  LogOut,
+  Package 
 } from 'lucide-react';
 
 const menuItems = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { id: 'viajes', label: 'Viajes', icon: Route },
+  { id: 'materiales', label: 'Materiales', icon: Package },
   { id: 'choferes', label: 'Choferes', icon: UserRound }, // Cambiado aquí también
   { id: 'vehiculos', label: 'Vehículos', icon: Truck },
   { id: 'inventario', label: 'Inventario', icon: Box },

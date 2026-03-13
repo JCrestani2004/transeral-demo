@@ -8,6 +8,7 @@ import Mantenimiento from './pages/Mantenimiento';
 import Choferes from './pages/Choferes';
 import Reportes from './pages/Reportes';
 import Vehiculos from './pages/Vehiculos';
+import Materiales from './pages/Materiales';
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
@@ -28,6 +29,7 @@ function App() {
       case 'inventario': return <Inventario />;
       case 'mantenimiento': return <Mantenimiento />;
       case 'reportes': return <Reportes />;
+      case 'materiales': return <Materiales />;
       default: return <DashboardHome />;
     }
   };
