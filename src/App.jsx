@@ -9,6 +9,7 @@ import Choferes from './pages/Choferes';
 import Reportes from './pages/Reportes';
 import Vehiculos from './pages/Vehiculos';
 import Materiales from './pages/Materiales';
+import Accidentes from './pages/Accidentes';
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
@@ -27,6 +28,7 @@ function App() {
       case 'choferes': return <Choferes />;
       case 'vehiculos': return <Vehiculos />;
       case 'inventario': return <Inventario />;
+      case 'accidentes': return <Accidentes />;
       case 'mantenimiento': return <Mantenimiento />;
       case 'reportes': return <Reportes />;
       case 'materiales': return <Materiales />;
@@ -56,7 +58,7 @@ function App() {
         </header>
 
         {/* Área de Contenido */}
-        <section className="flex-1 overflow-y-auto">
+        <section className="flex-1 overflow-y-auto animate-in fade-in duration-700">
           {renderContent()}
         </section>
       </main>

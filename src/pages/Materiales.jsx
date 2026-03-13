@@ -1,36 +1,43 @@
 import React from 'react';
-import { Package, BarChart3, TrendingUp, Filter } from 'lucide-react';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Cell } from 'recharts';
+import { motion } from 'framer-motion';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts';
+import { Package, TrendingUp, Anchor, Database } from 'lucide-react';
 
-const MATERIALES_DATA = [
-  { nombre: 'Aceite Motor', volumen: 450, unidad: 'Litros' },
-  { nombre: 'Llantas R22', volumen: 320, unidad: 'Unidades' },
-  { nombre: 'Filtros Aire', volumen: 280, unidad: 'Unidades' },
-  { nombre: 'Baterías', volumen: 150, unidad: 'Unidades' },
-  { nombre: 'Pastillas Freno', volumen: 90, unidad: 'Sets' },
+const DATA_VOLUMEN = [
+  { name: 'Maíz en Grano', valor: 45 },
+  { name: 'Repuestos', valor: 25 },
+  { name: 'Contenedores', valor: 30 },
 ];
+
+const COLORS = ['#0033A0', '#475569', '#94a3b8'];
 
 export default function Materiales() {
   return (
-    <div className="p-8 space-y-8 animate-in fade-in duration-500">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-800">Control de Materiales</h1>
-        <p className="text-slate-500 text-sm">Resumen de carga transportada por la flota.</p>
-      </div>
+    <motion.div 
+      initial={{ opacity: 0 }} 
+      animate={{ opacity: 1 }} 
+      className="p-4 md:p-8 space-y-8"
+    >
+      <header>
+        <h1 className="text-2xl font-black text-slate-800">Analítica de Carga</h1>
+        <p className="text-slate-500 text-sm">Distribución de materiales según rutas activas en Venezuela.</p>
+      </header>
 
-      {/* Gráfico y KPIs */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 bg-white p-6 rounded-3xl shadow-sm border border-slate-100">
-          <h3 className="font-bold text-slate-700 mb-6">Volumen por Insumo</h3>
-          <div className="h-64 w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Gráfico de Distribución */}
+        <div className="lg:col-span-2 bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="font-bold text-slate-700">Flujo de Materiales (%)</h3>
+            <Database size={20} className="text-slate-300" />
+          </div>
+          <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={MATERIALES_DATA}>
-                <XAxis dataKey="nombre" axisLine={false} tickLine={false} tick={{fontSize: 11}} />
-                <YAxis axisLine={false} tickLine={false} />
-                <Tooltip cursor={{fill: '#f8fafc'}} />
-                <Bar dataKey="volumen" radius={[8, 8, 0, 0]} barSize={40}>
-                  {MATERIALES_DATA.map((entry, index) => (
-                    <Cell key={index} fill={index === 0 ? '#0033A0' : '#cbd5e1'} />
+              <BarChart data={DATA_VOLUMEN} margin={{ top: 20 }}>
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 12, fontWeight: 'bold'}} />
+                <Tooltip cursor={{fill: 'transparent'}} contentStyle={{borderRadius: '15px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)'}} />
+                <Bar dataKey="valor" radius={[10, 10, 0, 0]} barSize={50}>
+                  {DATA_VOLUMEN.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Bar>
               </BarChart>
@@ -38,56 +45,56 @@ export default function Materiales() {
           </div>
         </div>
 
-        {/* Resumen rápido */}
-        <div className="space-y-4">
-          <div className="bg-[#0033A0] p-6 rounded-3xl text-white shadow-lg shadow-blue-900/20">
-            <TrendingUp size={32} className="mb-4 opacity-80" />
-            <p className="text-xs uppercase font-bold opacity-60">Material Líder</p>
-            <p className="text-2xl font-black">Aceite Motor</p>
-          </div>
-          <div className="bg-white p-6 rounded-3xl border border-slate-100">
-            <p className="text-xs uppercase font-bold text-slate-400">Total Materiales</p>
-            <p className="text-3xl font-black text-slate-800">1,290</p>
+        {/* KPI de Material Líder */}
+        <div className="space-y-6">
+          <motion.div 
+            whileHover={{ y: -5 }}
+            className="bg-[#0033A0] p-6 rounded-3xl text-white shadow-xl shadow-blue-900/20 relative overflow-hidden"
+          >
+            <TrendingUp size={80} className="absolute -right-4 -bottom-4 opacity-10" />
+            <p className="text-[10px] font-black uppercase opacity-60 tracking-widest">Material Predominante</p>
+            <h2 className="text-3xl font-black mt-2 italic">Maíz en Grano</h2>
+            <p className="text-xs mt-4 font-medium">+12% respecto al mes anterior</p>
+          </motion.div>
+
+          <div className="bg-white p-6 rounded-3xl border border-slate-100 flex items-center gap-4 shadow-sm">
+            <div className="p-3 bg-slate-50 text-slate-400 rounded-2xl"><Anchor size={24} /></div>
+            <div>
+              <p className="text-[10px] font-black text-slate-400 uppercase">Puerto de Mayor Carga</p>
+              <p className="text-lg font-bold text-slate-800">Puerto Cabello</p>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* TABLA DETALLADA */}
-      <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
-        <div className="p-6 border-b border-slate-50 flex justify-between items-center">
-          <h3 className="font-bold text-slate-700">Detalle de Materiales Transportados</h3>
-          <button className="flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-[#0033A0]">
-            <Filter size={14} /> Filtrar Reporte
-          </button>
+      {/* Tabla Mobile-Ready de Materiales */}
+      <div className="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm">
+        <div className="p-5 border-b border-slate-50">
+          <h3 className="font-bold text-slate-700">Listado de Carga por Ruta</h3>
         </div>
-        <table className="w-full text-left">
-          <thead className="bg-slate-50">
-            <tr>
-              <th className="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase">Nombre del Material</th>
-              <th className="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase">Cantidad</th>
-              <th className="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase">Unidad</th>
-              <th className="px-6 py-4 text-[11px] font-bold text-slate-400 uppercase">Estado</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-100">
-            {MATERIALES_DATA.map((m, i) => (
-              <tr key={i} className="hover:bg-slate-50/50">
-                <td className="px-6 py-4 font-bold text-slate-700 flex items-center gap-3">
-                  <div className="p-2 bg-blue-50 text-[#0033A0] rounded-lg">
-                    <Package size={14} />
-                  </div>
-                  {m.nombre}
-                </td>
-                <td className="px-6 py-4 font-mono font-bold text-slate-600">{m.volumen}</td>
-                <td className="px-6 py-4 text-sm text-slate-500">{m.unidad}</td>
-                <td className="px-6 py-4">
-                  <span className="px-2 py-1 rounded-md bg-green-50 text-green-600 text-[10px] font-bold uppercase">Distribuido</span>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead className="bg-slate-50 text-[10px] font-black uppercase text-slate-400">
+              <tr>
+                <th className="px-6 py-4">Insumo</th>
+                <th className="px-6 py-4">Frecuencia</th>
+                <th className="px-6 py-4">Ruta Principal</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              <tr className="hover:bg-slate-50/50">
+                <td className="px-6 py-4 font-bold text-slate-700 italic">Maíz en Grano</td>
+                <td className="px-6 py-4">
+                  <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                    <div className="bg-[#0033A0] h-full w-[80%]" />
+                  </div>
+                </td>
+                <td className="px-6 py-4 text-xs font-medium text-slate-500">V. de la Pascua</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
